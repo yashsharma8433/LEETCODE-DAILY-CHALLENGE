@@ -1,34 +1,19 @@
-
-
 class Solution {
-public:
+    public boolean checkInclusion(String s1, String s2) {
+        int[] cnt = new int[26];
+        for(char x: s1.toCharArray()){
+            cnt[x - 'a']++;
+        }
 
-    string convert(string s, int numRows) {
-    
-    if(numRows <= 1) return s;
+        int n1 = s1.length(), n2 = s2.length();
 
-    vector<string>v(numRows, ""); 
-
-    int j = 0, dir = -1;
-
-    for(int i = 0; i < s.length(); i++)
-    {
-
-        if(j == numRows - 1 || j == 0) dir *= (-1); 
-		 
-        v[j] += s[i];
-
-        if(dir == 1) j++;
-
-        else j--;
+        for(int i = 0; i < n2 - n1 + 1; i++){
+            int[] cnt2 = new int[26];
+            for(int j = i; j < i + n1; j++){
+                cnt2[s2.charAt(j) - 'a']++;
+            }
+            if(Arrays.equals(cnt, cnt2)) return true;
+        }
+        return false;
     }
-
-    string res;
-
-    for(auto &it : v) res += it; 
-
-    return res;
-
-    }
-};
-
+}
