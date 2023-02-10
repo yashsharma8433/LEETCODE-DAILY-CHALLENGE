@@ -1,18 +1,30 @@
-    public long distinctNames(String[] ideas) {
-        HashSet<Integer>[] count = new HashSet[26];
-        for (int i = 0; i < 26; ++i)
-            count[i] = new HashSet<>();
-        for (String s : ideas)
-            count[s.charAt(0) - 'a'].add(s.substring(1).hashCode());
-        long res = 0;
-        for (int i = 0; i < 26; ++i)
-            for (int j = i + 1; j < 26; ++j) {
-                long c1 = 0, c2 = 0;
-                for (int c : count[i])
-                    if (!count[j].contains(c)) c1++;
-                for (int c : count[j])
-                    if (!count[i].contains(c)) c2++;
-                res += c1 * c2;
+class Solution {
+    public int maxDistance(int[][] grid) {
+        int n = grid.length;
+        Queue<int[]> q = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) q.offer(new int[]{i, j});
             }
-        return res * 2;
+        }
+        if (q.isEmpty() || q.size() == n * n) return -1;
+        int res = -1;
+        int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        while (!q.isEmpty()) {
+            int size = q.size();
+            res++;
+            while (size-- > 0) {
+                int[] cell = q.poll();
+                int x = cell[0], y = cell[1];
+                for (int[] dir : dirs) {
+                    int i = x + dir[0], j = y + dir[1];
+                    if (i >= 0 && i < n && j >= 0 && j < n && grid[i][j] == 0) {
+                        grid[i][j] = 1;
+                        q.offer(new int[]{i, j});
+                    }
+                }
+            }
+        }
+        return res;
     }
+}
