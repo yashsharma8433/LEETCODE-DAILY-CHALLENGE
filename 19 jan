@@ -1,23 +1,19 @@
 class Solution 
 {
-  public int minDiffInBST(TreeNode root) 
-  {
-    inorder(root);
-    return ans;
-  }
-
-  private int ans = Integer.MAX_VALUE;
-  private Integer pred = null;
-
-  private void inorder(TreeNode root) 
-  {
-    if (root == null)
-      return;
-
-    inorder(root.left);
-    if (pred != null)
-      ans = Math.min(ans, root.val - pred);
-    pred = root.val;
-    inorder(root.right);
-  }
+    public TreeNode invertTree(TreeNode root)
+    {//we are doing the postorder traversal because we are first knowing about the child and then about the parent //Bottom Up Approach
+       
+        if(root == null)//base casewe hit the null node 
+            return null;//we just return null saying that no node is there its empty 
+        
+        TreeNode left= invertTree(root.left);//Recursing down the left subtree//knowing about the left child //LEFT
+        TreeNode right= invertTree(root.right);//Recursing down the right subtree//knowing about the right child //RIGHT
+        
+        //ROOT
+        //just swapping the pointers, to just alternate the node 
+        root.left= right;//root left is pointing to right child
+        root.right= left;//root right is pointing to left child
+        
+        return root;//returning the root to maintain the backward link//And to tell the parent that I am present
+    }
 }
