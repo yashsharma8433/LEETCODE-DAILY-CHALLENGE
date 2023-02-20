@@ -1,19 +1,51 @@
-class Solution 
-{
-    public TreeNode invertTree(TreeNode root)
-    {//we are doing the postorder traversal because we are first knowing about the child and then about the parent //Bottom Up Approach
-       
-        if(root == null)//base casewe hit the null node 
-            return null;//we just return null saying that no node is there its empty 
-        
-        TreeNode left= invertTree(root.left);//Recursing down the left subtree//knowing about the left child //LEFT
-        TreeNode right= invertTree(root.right);//Recursing down the right subtree//knowing about the right child //RIGHT
-        
-        //ROOT
-        //just swapping the pointers, to just alternate the node 
-        root.left= right;//root left is pointing to right child
-        root.right= left;//root right is pointing to left child
-        
-        return root;//returning the root to maintain the backward link//And to tell the parent that I am present
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> ans = new LinkedList();
+        if(root==null){
+            return ans;
+        }
+        Queue <TreeNode> q = new LinkedList();
+        q.add(root);
+        int level = 1;
+        while(!q.isEmpty()){
+            List<Integer> l = new ArrayList();
+            int c = q.size();
+            for(int i=0;i<c;i++){
+                TreeNode cur = q.poll();
+                l.add(cur.val);
+                if(cur.left!=null){
+                    q.add(cur.left);
+                }
+                if(cur.right!=null){
+                    q.add(cur.right);
+                }
+            }
+            if(level%2==0){
+                List<Integer> ll = new ArrayList();
+                for(int i =l.size()-1;i>=0;i--){
+                    ll.add(l.get(i));
+                }
+                ans.add(ll);
+            }else{
+                ans.add(l);
+            }
+            level++;
+        }
+        return ans;
     }
 }
