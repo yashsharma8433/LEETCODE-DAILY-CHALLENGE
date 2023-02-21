@@ -1,51 +1,31 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
-class Solution {
-    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-        List<List<Integer>> ans = new LinkedList();
-        if(root==null){
-            return ans;
+   public static int singleNonDuplicate(int[] nums) {
+        int start = 0, end = nums.length - 1;
+
+        while (start < end) {
+            // We want the first element of the middle pair,
+            // which should be at an even index if the left part is sorted.
+            // Example:
+            // Index: 0 1 2 3 4 5 6
+            // Array: 1 1 3 3 4 8 8
+            //            ^
+            int mid = (start + end) / 2;
+            if (mid % 2 == 1) mid--;
+
+            // We didn't find a pair. The single element must be on the left.
+            // (pipes mean start & end)
+            // Example: |0 1 1 3 3 6 6|
+            //               ^ ^
+            // Next:    |0 1 1|3 3 6 6
+            if (nums[mid] != nums[mid + 1]) end = mid;
+
+            // We found a pair. The single element must be on the right.
+            // Example: |1 1 3 3 5 6 6|
+            //               ^ ^
+            // Next:     1 1 3 3|5 6 6|
+            else start = mid + 2;
         }
-        Queue <TreeNode> q = new LinkedList();
-        q.add(root);
-        int level = 1;
-        while(!q.isEmpty()){
-            List<Integer> l = new ArrayList();
-            int c = q.size();
-            for(int i=0;i<c;i++){
-                TreeNode cur = q.poll();
-                l.add(cur.val);
-                if(cur.left!=null){
-                    q.add(cur.left);
-                }
-                if(cur.right!=null){
-                    q.add(cur.right);
-                }
-            }
-            if(level%2==0){
-                List<Integer> ll = new ArrayList();
-                for(int i =l.size()-1;i>=0;i--){
-                    ll.add(l.get(i));
-                }
-                ans.add(ll);
-            }else{
-                ans.add(l);
-            }
-            level++;
-        }
-        return ans;
+
+        // 'start' should always be at the beginning of a pair.
+        // When 'start > end', start must be the single element.
+        return nums[start];
     }
-}
